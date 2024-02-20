@@ -1,1 +1,5 @@
-toml=0.10.2
+customtkinter==5.2.2
+toml==0.10.2
+python-dotenv==1.0.1
+aiohttp[speedups]
+pillow==10.2.0
