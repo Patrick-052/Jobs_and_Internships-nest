@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import asyncio
 import textwrap
 from PIL import Image
 import customtkinter as ctk

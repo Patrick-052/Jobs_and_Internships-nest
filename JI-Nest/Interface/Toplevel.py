@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+import os
+import toml
 import customtkinter as ctk
 
+
+Config_specs = os.path.normpath(
+    f"{os.path.expanduser('~')}/portfolio_projects/Jobs_and_Internships-Nest/config.toml")
 
 class TopLevelWindow(ctk.CTkToplevel):
     """ Class that creates the top level windows for the app"""
@@ -12,8 +17,9 @@ class TopLevelWindow(ctk.CTkToplevel):
 
     def display_instructions(self):
         """ Function that displays the instructions for using the app """
+        app_name, app_usage = get_config()
         self.title("App Usage")
-        instructions = ctk.CTkLabel(self, text="Instructions")
+        instructions = ctk.CTkLabel(self, text=app_usage)
         instructions.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
     def pull_details(self):
@@ -44,3 +50,18 @@ class TopLevelWindow(ctk.CTkToplevel):
         self.geometry("300x100")
         error_message = ctk.CTkLabel(self, text="Please enter a search input")
         error_message.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+
+
+def get_config():
+    """ Function that gets the configuration details for the app """
+    try:
+        configs = toml.load(Config_specs)
+        app_name = configs['project']['name']
+        app_usage = configs['App_Usage']['Instructions']
+        return app_name, app_usage
+    except FileNotFoundError:
+        print(f"Configuration file {Config_specs} not found")
+        return None, None
+    except toml.TomlDecodeError as e:
+        print(f"Error decoding {Config_specs}: {e}")
+        return None, None
