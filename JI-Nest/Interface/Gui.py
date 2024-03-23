@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
+import asyncio
 import textwrap
+import Serp as sp
+import Findwork as fw
 from PIL import Image
 import customtkinter as ctk
 from Toplevel import TopLevelWindow
 
-Description = ["Jobs", "Internships"]
-Engines = ["Indeed", "LinkedIn", "Glassdoor", "Monster", "SimplyHired",
-           "ZipRecruiter", "CareerBuilder", "Snagajob"]
+Description = ["Description", "Jobs", "Internships"]
+Engines = ["Engine", "Findwork", "Serp", "USA Jobs"]
 
 
 class ImageFrame(ctk.CTkFrame):
@@ -63,7 +65,7 @@ class DescriptionFrame(ctk.CTkFrame):
         # Create the Engines OptionMenu
         self.engine_optionmenu = ctk.CTkOptionMenu(self, values=Engines,
                                                    width=168)
-        self.engine_optionmenu.set("Engine")  # Set the default value
+        self.engine_optionmenu.set("Engine")
         self.engine_optionmenu.grid(row=0, column=2, padx=(0, 5), pady=10,
                                     sticky="w")
 
@@ -91,6 +93,7 @@ class DescriptionFrame(ctk.CTkFrame):
 
         # Details menu
         self.detail_menu = ctk.CTkOptionMenu(self, values=Description)
+        self.detail_menu.set("Description")
         self.detail_menu.grid(row=1, column=2, padx=(5, 0), pady=(20, 10),
                               sticky="w")
 
@@ -99,37 +102,73 @@ class DescriptionFrame(ctk.CTkFrame):
         self.details_label.grid(row=2, column=1, padx=(65, 10),
                                 pady=(0, 10), sticky="w")
 
-    def obtain_query_details(self):
+    def obtain_dec_details(self):
         """ Function that obtains the details to use in the query """
-        description = self.description_optionmenu.get()
+        desc = self.description_optionmenu.get()
         engine = self.engine_optionmenu.get()
+        if desc == "Description" or engine == "Engine" or \
+                desc == "Description" and engine == "Engine":
+            self.wrong_input()
+        dec_dict = {"description": desc, "engine": engine}
+        return dec_dict
+
+    def obtain_pull_details(self):
+        """ Function that obtains the details to use in the query """
         no_details = self.number_of_details.get()
         details = self.detail_menu.get()
-        query_dict = {"description": description, "engine": engine,
-                      "no_details": no_details, "details": details}
-        return query_dict
+        if no_details == "" and details == "Description" or details !=\
+                "Description" and no_details == "" or details == "Description"\
+                and no_details != "":
+            self.error_window()
+        elif no_details != "" and details != "Description":
+            pull_dict = {"no_details": no_details, "details": details}
+            return pull_dict
 
     def pull_details(self):
         """ Function that pulls the saved details from the selected
             description """
+        Query = self.obtain_pull_details()
         if self.toplevel_window is None or not\
                 self.toplevel_window.winfo_exists():
             self.toplevel_window = TopLevelWindow(self)
-            self.toplevel_window.pull_details()
+            self.toplevel_window.pull_details(Query)
+        self.toplevel_window.lift()
+        self.toplevel_window.focus()
+
+    def error_window(self):
+        """ Function that displays an error message when the user does not
+            enter any input """
+        if self.toplevel_window is None or not\
+                self.toplevel_window.winfo_exists():
+            self.toplevel_window = TopLevelWindow(self)
+            self.toplevel_window.error_missing_query()
+        self.toplevel_window.lift()
+        self.toplevel_window.focus()
+
+    def wrong_input(self):
+        """ Function that displays an error message when the user does not
+            select any input/selects a single wrong input """
+        if self.toplevel_window is None or not\
+                self.toplevel_window.winfo_exists():
+            self.toplevel_window = TopLevelWindow(self)
+            self.toplevel_window.error_wrong_input()
         self.toplevel_window.lift()
         self.toplevel_window.focus()
 
 
 class UserInputFrame(ctk.CTkFrame):
     """ Class that creates the user input frame """
-    def __init__(self, master, results_frame, **kwargs):
+    def __init__(self, master, app_instance,
+                 results_frame, DE_Frame, **kwargs):
         super().__init__(master, **kwargs)
 
         # Top level window
         self.toplevel_window = None
 
         # Frame to be used to display the results
+        self.app_instance = app_instance
         self.results_frame = results_frame
+        self.DE_Frame = DE_Frame
 
         # User Input
         self.user_input = ctk.CTkEntry(self, width=230, height=40)
@@ -141,7 +180,7 @@ class UserInputFrame(ctk.CTkFrame):
                                            height=30, fg_color="blue",
                                            hover_color="green",
                                            anchor="center",
-                                           command=self.populate_results)
+                                           command=self.search_button_clicked)
         self.search_button.grid(row=0, column=1, padx=10, pady=(30, 10),
                                 sticky="e")
 
@@ -149,9 +188,11 @@ class UserInputFrame(ctk.CTkFrame):
         self.choice_checkbox.grid(row=1, column=0, padx=(50, 10),
                                   pady=(10, 20), sticky="w")
 
-        self.country_choice = ctk.CTkOptionMenu(self, values=["USA", "Canada"],
-                                                width=10)
-        self.country_choice.set("COUNTRY")
+        self.country_label = ctk.CTkLabel(self, text="Country/City")
+        self.country_label.grid(row=1, column=0, padx=(190, 0), pady=(10, 20),
+                                sticky="w")
+
+        self.country_choice = ctk.CTkEntry(self, width=110, height=30)
         self.country_choice.grid(row=1, column=1, padx=10, pady=(10, 20),
                                  sticky="w")
 
@@ -160,19 +201,22 @@ class UserInputFrame(ctk.CTkFrame):
         user_in_dict = {}
         if self.user_input.get() != "":
             if self.choice_checkbox.get() == 1 and self.country_choice.get()\
-                    != "COUNTRY":
+                    != "":
                 self.error_window()
             else:
                 user_input = self.user_input.get()
                 if self.choice_checkbox.get() == 1 and\
-                        self.country_choice.get() == "COUNTRY":
-                    remote = "Remote"
+                        self.country_choice.get() == "":
+                    remote = "True"
                     user_in_dict = {"user_input": user_input, "remote": remote}
                 elif self.choice_checkbox.get() == 0 and\
-                        self.country_choice.get() != "COUNTRY":
+                        self.country_choice.get() != "":
                     country = self.country_choice.get()
                     user_in_dict = {"user_input": user_input,
-                                    "country": country}
+                                    "location": country}
+                elif self.choice_checkbox.get() == 0 and\
+                        self.country_choice.get() == "":
+                    user_in_dict = {"user_input": user_input}
                 return user_in_dict
 
         self.missing_input()
@@ -199,44 +243,64 @@ class UserInputFrame(ctk.CTkFrame):
         self.toplevel_window.lift()
         self.toplevel_window.focus()
 
-    def populate_results(self):
-        """ Function that populates the results frame with the
-            search results """
-        self.results_frame.clear_results()
-        query_details = []
-        user_input = self.obtain_user_input()
-        if user_input is not None:
-            for k in user_input:
-                query_details.append(user_input[k])
-        self.results_frame.display_results(query_details)
+    def search_button_clicked(self):
+        """ Function called when the search button is clicked """
+        self.app_instance.populate_results()
 
 
 class ResultsFrame(ctk.CTkScrollableFrame):
     """ Class that creates the results frame """
-    def __init__(self, master, **kwargs):
+    def __init__(self, master, DE_frame, **kwargs):
         super().__init__(master, **kwargs)
 
         # Top level window
         self.toplevel_window = None
 
+        # Description and Engine Frame
+        self.DE_Frame = DE_frame
+
     def display_results(self, results):
         """ Function that displays the results of the search """
-        for i, result in enumerate(results):
-            wrapped_text = textwrap.fill(result, width=20)
-            result_label = ctk.CTkLabel(self, text=wrapped_text)
-            result_label.grid(row=i, column=0, padx=(10, 80), pady=10,
-                              sticky="w")
+        if results and isinstance(results, list):
+            for i, result in enumerate(results):
+                wrapped_text = textwrap.fill(result, width=20)
+                result_label = ctk.CTkLabel(self, text=wrapped_text)
+                result_label.grid(row=i, column=0, padx=(10, 80), pady=10,
+                                  sticky="w")
 
-            button = ctk.CTkButton(self, text="Details",
-                                   command=self.show_details)
-            button.grid(row=i, column=1, padx=(10, 0), pady=10, sticky="e")
+                button = ctk.CTkButton(self, text="Details",
+                                       command=lambda label=result_label:
+                                       self.show_details(label))
+                button.grid(row=i, column=1, padx=(10, 0), pady=10, sticky="e")
+        else:
+            no_results = ctk.CTkLabel(self, text="No results found")
+            no_results.grid(row=0, column=1, padx=(120, 80),
+                            pady=10, sticky="ew")
 
-    def show_details(self):
+    def show_details(self, label):
         """ Function that displays the details of the search result """
+        wrapped = label.cget("text")
+        detail = wrapped.replace("\n", " ")
+        engine = self.DE_Frame.obtain_dec_details().get("engine")
+        job_id = ""
+
+        if engine == "Findwork":
+            results = fw.populate()
+            for res in results:
+                if res.get("role") == detail:
+                    job_id = res.get("job_id")
+                    break
+        elif engine == "Serp":
+            results = sp.populate()
+            for res in results:
+                if res.get("role") == detail:
+                    job_id = res.get("job_id")
+                    break
+
         if self.toplevel_window is None or not\
                 self.toplevel_window.winfo_exists():
             self.toplevel_window = TopLevelWindow(self)
-            self.toplevel_window.display_details()
+            self.toplevel_window.display_details(detail, engine, job_id)
         self.toplevel_window.lift()
         self.toplevel_window.focus()
 
@@ -268,15 +332,51 @@ class App(ctk.CTk):
                            sticky="nsw")
 
         # Results Frame
-        self.results_frame = ResultsFrame(self)
+        self.results_frame = ResultsFrame(self, DE_frame=self.DE_Frame)
         self.results_frame.grid(row=0, column=1, sticky="nsew",
                                 pady=(150, 10), padx=(2, 3), rowspan=2)
 
         # User Input Frame
         self.user_input = UserInputFrame(self,
+                                         app_instance=self,
                                          results_frame=self.results_frame,
+                                         DE_Frame=self.DE_Frame,
                                          height=150)
         self.user_input.grid(row=0, column=1, sticky="new")
+
+    def populate_results(self):
+        """ Function that populates the results frame
+            with the search results """
+        self.results_frame.clear_results()
+        search_query = self.user_input.obtain_user_input()
+        dec_details = self.DE_Frame.obtain_dec_details()
+        dec, engine = dec_details.get("description", "Description"), \
+            dec_details.get("engine", "Engine")
+        if search_query and dec_details:
+            if dec == "Internships":
+                pass
+            elif dec == "Jobs":
+                if engine != "Engine":
+                    if engine == "Indeed":
+                        pass
+                    elif engine == "Findwork":
+                        asyncio.run(fw.main(search_query))
+                        filtered_results = []
+                        results = fw.populate()
+                        for res in results:
+                            filtered_results.append(
+                                res.get("role"))
+                        self.results_frame.display_results(
+                            filtered_results)
+                    elif engine == "Serp":
+                        asyncio.run(sp.main(search_query))
+                        filtered_res = []
+                        res = sp.populate()
+                        for r in res:
+                            filtered_res.append(r.get("role"))
+                        self.results_frame.display_results(filtered_res)
+                    else:
+                        pass
 
 
 if __name__ == "__main__":

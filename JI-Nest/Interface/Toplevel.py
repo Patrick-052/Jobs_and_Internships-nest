@@ -81,17 +81,23 @@ class TopLevelWindow(ctk.CTkToplevel):
             both remote and country """
         self.title("Error")
         self.geometry("300x100")
-        error_message = ctk.CTkLabel(self, text="Please select either remote"
-                                     " or country, not both")
-        error_message.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        error = """You cannot select both remote and country/city
+                you have to choose either remote or enter a country/city"""
+        error_message = ctk.CTkLabel(self,
+                                     text=textwrap.fill(error, width=30),
+                                     text_color="red")
+        error_message.grid(row=0, column=0, padx=(10, 30), pady=10,
+                           sticky="ew")
 
     def error_missing_input(self):
         """ Function that displays an error message when the user does not
             enter any input """
         self.title("Error")
         self.geometry("300x100")
-        error_message = ctk.CTkLabel(self, text="Please enter a search input")
-        error_message.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        error_message = ctk.CTkLabel(self, text="Please enter a search input",
+                                     text_color="red")
+        error_message.grid(row=0, column=0, padx=(10, 30), pady=10,
+                           sticky="ew")
 
     def error_missing_query(self):
         """ Function that displays an error message when the user does not
@@ -104,6 +110,17 @@ class TopLevelWindow(ctk.CTkToplevel):
                                      text_color="red", height=5)
         error_message.grid(row=0, column=0, padx=(10, 30), pady=10,
                            sticky="ew", columnspan=2)
+
+    def error_wrong_input(self):
+        """ Function that displays an error message when the user enters
+            the wrong input """
+        self.title("Error")
+        self.geometry("300x100")
+        error = """ Please choose a valid Description and Engine """
+        error_message = ctk.CTkLabel(self, text=textwrap.fill(error, width=30),
+                                     text_color="red")
+        error_message.grid(row=0, column=0, padx=(10, 30), pady=10,
+                           sticky="ew")
 
 
 class PullFrame(ctk.CTkFrame):
