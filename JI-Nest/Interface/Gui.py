@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import asyncio
 import textwrap
-import Serp as sp
-import Findwork as fw
 from PIL import Image
 import customtkinter as ctk
+from APIs.Jobs import Serp as sp
+from APIs.Jobs import Findwork as fw
 from Toplevel import TopLevelWindow
 
 Description = ["Description", "Jobs", "Internships"]
