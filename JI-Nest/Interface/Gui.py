@@ -3,11 +3,12 @@ import asyncio
 import textwrap
 from PIL import Image
 import customtkinter as ctk
+from APIs.Jobs import Us as us
 from APIs.Jobs import Serp as sp
 from APIs.Jobs import Findwork as fw
 from Toplevel import TopLevelWindow
 
-# Options
+
 Description = ["Description", "Jobs", "Internships"]
 Engines = ["Engine", "Findwork", "Serp", "USA Jobs"]
 
@@ -297,6 +298,12 @@ class ResultsFrame(ctk.CTkScrollableFrame):
                 if res.get("role") == detail:
                     job_id = res.get("job_id")
                     break
+        elif engine == "USA Jobs":
+            results = us.populate()
+            for res in results:
+                if res.get("role") == detail:
+                    job_id = res.get("job_id")
+                    break
 
         if self.toplevel_window is None or not\
                 self.toplevel_window.winfo_exists():
@@ -373,6 +380,13 @@ class App(ctk.CTk):
                         asyncio.run(sp.main(search_query))
                         filtered_res = []
                         res = sp.populate()
+                        for r in res:
+                            filtered_res.append(r.get("role"))
+                        self.results_frame.display_results(filtered_res)
+                    elif engine == "USA Jobs":
+                        asyncio.run(us.main(search_query))
+                        filtered_res = []
+                        res = us.populate()
                         for r in res:
                             filtered_res.append(r.get("role"))
                         self.results_frame.display_results(filtered_res)

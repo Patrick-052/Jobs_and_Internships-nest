@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import toml
 import json
 import time
@@ -9,6 +10,7 @@ from uuid import uuid4
 from redis import Redis
 import customtkinter as ctk
 from datetime import timedelta
+from APIs.Jobs import Us as us
 from APIs.Jobs import Serp as sp
 from APIs.Jobs import Findwork as fw
 
@@ -69,9 +71,6 @@ class TopLevelWindow(ctk.CTkToplevel):
         else:
             pass
 
-        # details = ctk.CTkLabel(self, text="Pulled Details")
-        # details.grid(row=0, column=0, padx=10, pady=10, sticky="w")
-
     def display_details(self, detail, engine, job_id):
         """ Function that displays the details of the search result """
         self.title("Details")
@@ -81,10 +80,11 @@ class TopLevelWindow(ctk.CTkToplevel):
         elif engine == "Serp":
             results = sp.job_details(detail, job_id)
             self.details.populate_details(results)
+        elif engine == "USA Jobs":
+            results = us.job_details(detail, job_id)
+            self.details.populate_details(results)
         else:
             pass
-        # details = ctk.CTkLabel(self, text="Details")
-        # details.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
     def error_input_details(self):
         """ Function that displays an error message when the user selects
