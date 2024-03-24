@@ -1,2 +1,37 @@
-[Project]
-name=J & I Nest
+# Project configurations
+
+[project]
+name = "J & I Nest"
+version = "1.0.0"
+author = "Patrick-052"
+dependencies = [
+    "customtkinter",
+    "toml",
+    "python-dotenv",
+    "aiohttp[speedups]",
+    "pillow"
+]
+description = """
+    This gui app simplifies the need to visit different jobs and internships websites
+    by encapsulating them using apis thus reduces the overall trips and presentsyou an
+    interface to query, save and pull saved details. """
+requires-python = ">=3.7"
+
+[App-Usage]
+Instructions = """
+    To search you have to input  the search input,
+    then choose the Description of your choice and need
+    followed by the Engine(API) to use for the search,
+    Finally choose whether a Remote search or input a
+    country/city to make your search, then complete by
+    pressing the search button and wait for results.
+
+    To save details for any results, press details button
+    for the result, read through them and if you find them
+    interesting press save button at the bottom which will
+    allow revisting by pulling.
+
+    To pull saved details all you have to do is to enter
+    the number of details you need pulled and the description
+    then press the pull button and a pop up will present the
+    results """
