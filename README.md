@@ -1,14 +1,11 @@
 # Project: Jobs_and_Internships-nest
 
-[![Github license](https://img.shields.io/github/license/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github stars](https://img.shields.io/github/stars/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github forks](https://img.shields.io/github/forks/Patrick-052/Jobs_and_Internships-nest)]()
+[![Github language count](https://img.shields.io/github/languages/count/Patrick-052/Jobs_and_Internships-nest)]()
+[![Github top language](https://img.shields.io/github/languages/top/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github issues](https://img.shields.io/github/issues/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github pull requests](https://img.shields.io/github/issues-pr/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github contributors](https://img.shields.io/github/contributors/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github repo size](https://img.shields.io/github/repo-size/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github language count](https://img.shields.io/github/languages/count/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github top language](https://img.shields.io/github/languages/top/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github commit activity](https://img.shields.io/github/commit-activity/m/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github last commit](https://img.shields.io/github/last-commit/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github commit activity](https://img.shields.io/github/commit-activity/y/Patrick-052/Jobs_and_Internships-nest)]()
@@ -27,14 +24,14 @@
 - [Contact](#contact)
 
 ## Project Overview
-- JI-Nest: This directory contains the main application code including temporary data storage,
+- **JI-Nest**: This directory contains the main application code including temporary data storage,
            API controllers and data manipulation
-- config: This File contains the configuration settings for the application
-- Tests: This directory contains the test cases for the application
-- LICENSE: This file contains the license information for the application
-- README.md: This file contains the information about the application
-- requirements.txt: This file contains the dependencies for the application
-- setup.py: This file contains the setup information for the application
+- **config**: This File contains the configuration settings for the application
+- **Tests**: This directory contains the test cases for the application
+- **LICENSE**: This file contains the license information for the application
+- **README.md**: This file contains the information about the application
+- **requirements.txt**: This file contains the dependencies for the application
+- **setup.py**: This file contains the setup information for the application
 
 ## Installation
 To set up this project, follow these steps:
