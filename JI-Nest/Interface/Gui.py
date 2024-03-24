@@ -7,6 +7,7 @@ from APIs.Jobs import Serp as sp
 from APIs.Jobs import Findwork as fw
 from Toplevel import TopLevelWindow
 
+# Options
 Description = ["Description", "Jobs", "Internships"]
 Engines = ["Engine", "Findwork", "Serp", "USA Jobs"]
 
