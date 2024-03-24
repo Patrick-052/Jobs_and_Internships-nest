@@ -5,16 +5,18 @@ import json
 import time
 import textwrap
 import subprocess
-import Serp as sp
-import Findwork as fw
 from uuid import uuid4
 from redis import Redis
 import customtkinter as ctk
 from datetime import timedelta
+from APIs.Jobs import Serp as sp
+from APIs.Jobs import Findwork as fw
 
 
-Config_specs = os.path.normpath(
-    f"{os.path.expanduser('~')}/portfolio_projects/Jobs_and_Internships-Nest/config.toml")
+# Get the path to the config file
+script_dir = os.path.dirname(os.path.abspath(__file__))
+config_dir = os.path.dirname(os.path.dirname(script_dir))
+Config_specs = os.path.join(config_dir, "config.toml")
 
 
 class TopLevelWindow(ctk.CTkToplevel):
@@ -37,8 +39,16 @@ class TopLevelWindow(ctk.CTkToplevel):
         """ Function that displays the instructions for using the app """
         app_name, app_usage = get_config()
         self.title("App Usage")
-        instructions = ctk.CTkLabel(self, text=app_usage)
-        instructions.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+        instructions_lines = app_usage.split('\n')
+        for idx, line in enumerate(instructions_lines):
+            instruction_label = ctk.CTkLabel(self.details, text=line.strip(),
+                                             font=("Helvetica", 12),
+                                             justify="left", wraplength=360)
+            instruction_label.grid(row=idx + 1, column=0, columnspan=2,
+                                   padx=(10, 20), pady=(0, 5))
+
+        self.details.grid_rowconfigure(len(instructions_lines) + 1, weight=1)
+        self.details.grid_columnconfigure(0, weight=1)
 
     def pull_details(self, Query):
         """ Function that displays the details of the search result """
@@ -267,7 +277,7 @@ def get_config():
     try:
         configs = toml.load(Config_specs)
         app_name = configs['project']['name']
-        app_usage = configs['App_Usage']['Instructions']
+        app_usage = configs['App-Usage']['Instructions']
         return app_name, app_usage
     except FileNotFoundError:
         print(f"Configuration file {Config_specs} not found")
