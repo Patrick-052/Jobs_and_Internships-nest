@@ -10,7 +10,7 @@
 [![Github last commit](https://img.shields.io/github/last-commit/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github commit activity](https://img.shields.io/github/commit-activity/y/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github commit activity](https://img.shields.io/github/commit-activity/w/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github contributors](https://img.shields.io/github/contributors/Patrick-052/Jobs_and_Internships-nest)]()
+
 
 
 # Jobs_and_Internships-nest
