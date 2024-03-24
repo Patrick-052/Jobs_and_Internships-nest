@@ -7,18 +7,13 @@
 [![Github pull requests](https://img.shields.io/github/issues-pr/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github contributors](https://img.shields.io/github/contributors/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github repo size](https://img.shields.io/github/repo-size/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github code size](https://img.shields.io/github/languages/code-size/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github language count](https://img.shields.io/github/languages/count/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github top language](https://img.shields.io/github/languages/top/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github release](https://img.shields.io/github/v/release/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github tag](https://img.shields.io/github/v/tag/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github commit activity](https://img.shields.io/github/commit-activity/m/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github last commit](https://img.shields.io/github/last-commit/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github commit activity](https://img.shields.io/github/commit-activity/y/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github commit activity](https://img.shields.io/github/commit-activity/w/Patrick-052/Jobs_and_Internships-nest)]()
 [![Github contributors](https://img.shields.io/github/contributors/Patrick-052/Jobs_and_Internships-nest)]()
-[![Github closed issues](https://img.shields.io/github/issues)]()
-
 
 
 # Jobs_and_Internships-nest
